@@ -5,15 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button mBtnStart, mBtnLock, mBtnWipeData, mBtnUninstall;
     private ComponentName mDeviceAdminSample;
+    private DevicePolicyManager mDPM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,15 +53,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.btn_lock:
+                if (mDPM.isAdminActive(mDeviceAdminSample)) {
+                    mDPM.lockNow();
+                    mDPM.resetPassword("", 0);
+                }else{
+                    Toast.makeText(this, "请先激活", Toast.LENGTH_SHORT).show();
+                }
                 break;
-            case R.id.btn_wipe_data:
+            case R.id.btn_wipe_data: // todo -> 一键清除数据
                 break;
-            case R.id.btn_uninstall:
+            case R.id.btn_uninstall: // todo -> 一键卸载
                 break;
         }
     }
 
     private void initData() {
         mDeviceAdminSample = new ComponentName(this, DeviceAdmin.class);
+        /**
+         * 实例化设备的管理者对象
+         */
+        mDPM = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
     }
 }
