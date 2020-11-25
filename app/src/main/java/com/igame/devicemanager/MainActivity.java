@@ -60,7 +60,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(this, "请先激活", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.btn_wipe_data: // todo -> 一键清除数据
+            case R.id.btn_wipe_data:
+                if (mDPM.isAdminActive(mDeviceAdminSample)) {
+                    mDPM.wipeData(0);
+                }else{
+                    Toast.makeText(this, "请先激活", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.btn_uninstall: // todo -> 一键卸载
                 break;
