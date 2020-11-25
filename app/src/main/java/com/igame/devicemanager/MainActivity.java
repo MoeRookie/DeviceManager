@@ -7,6 +7,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -45,9 +46,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
+        Intent intent;
         switch (view.getId()) {
             case R.id.btn_start:
-                Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
                 intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, mDeviceAdminSample);
                 intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "超级管理员");
                 startActivity(intent);
@@ -67,7 +69,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(this, "请先激活", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.btn_uninstall: // todo -> 一键卸载
+            case R.id.btn_uninstall:
+                intent = new Intent("android.intent.action.DELETE");
+                intent.addCategory("android.intent.category.DEFAULT");
+                intent.setData(Uri.parse("package:" + getPackageName()));
+                startActivity(intent);
                 break;
         }
     }
